@@ -7,7 +7,6 @@ public class SubDeterminantesSerial{
     private static String FILENAME = "SERIAL.TXT";
     private static int    M = 5;//filas
     private static int    N = 4;//columnas
-    //private static String KEY = "1234";
     private static double CADENA;
     private static int BLOCK = 5; //cantidad de digitos de cada dato , el digito finales " " contando →
     private static byte[] RECORD = new byte[BLOCK]; //para la lectura de cada dato 

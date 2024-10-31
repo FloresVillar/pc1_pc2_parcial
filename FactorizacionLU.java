@@ -2,7 +2,7 @@
 //import javax.swing.*;
 import java.util.*;
 public class FactorizacionLU{
-	static int N = 6;//tiene que ser par.
+	static int N = 20;//tiene que ser par.
 	static double [][] a;
 	static double [][] l_s;
 	static double [][] u_s;

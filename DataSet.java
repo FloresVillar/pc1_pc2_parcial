@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 public class DataSet {
 static int filas = 1000;
 static int columnas = 1000;
-static String DATAFILE = "Data_potencia_matriz.TXT";
+static String DATAFILE = "DATA_POTENCIA_MATRIZ.TXT";
 //------------------------------------------------------
 public static void CreateFile(int M, int N) {
     Random random = new Random();

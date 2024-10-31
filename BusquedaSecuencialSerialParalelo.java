@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 //Buenos dias. El proceso Paralelo se ubica dentro del metodo con el mismo nombre ProcesoParalelo()
 public class BusquedaSecuencialSerialParalelo{
-private static String FILENAME = "DATOS.TXT";
+private static String FILENAME = "DATOS_BUSQUEDA_SECUENCIAL.TXT";
 private static int    N = 1000000;
 private static String KEY = "01234567890";
 private static String CADENA;
