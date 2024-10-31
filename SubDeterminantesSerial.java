@@ -4,7 +4,7 @@ import java.io.*;
 //import java.util.List;
 //import java.util.Scanner;
 public class SubDeterminantesSerial{
-    private static String FILENAME = "SERIAL.TXT";
+    private static String FILENAME = "SERIAL_DETERMINANTES.TXT";
     private static int    M = 5;//filas
     private static int    N = 4;//columnas
     private static double CADENA;

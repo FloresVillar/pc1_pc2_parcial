@@ -4,7 +4,7 @@ import java.util.LinkedList;
 //import java.util.List;
 //import java.util.Scanner;
 public class SubDeterminantesParalalelo{
-    private static String FILENAME = "PARALELO.TXT";
+    private static String FILENAME = "PARALELO_DETERMINANTES.TXT";
     private static int M = 10;//filas
     private static int N = 4;//columnas
     //private static String KEY = "1234";
