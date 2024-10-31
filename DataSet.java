@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 public class DataSet {
 static int filas = 1000;
 static int columnas = 1000;
-static String DATAFILE = "DATA_POTENCIA_MATRIZ.TXT";
+static String DATAFILE = "DATAPOTENCIAMATRIZ.TXT";
 //------------------------------------------------------
 public static void CreateFile(int M, int N) {
     Random random = new Random();
@@ -24,7 +24,7 @@ public static void CreateFile(int M, int N) {
             for (int i = 0; i < M; i++) {
                 for (int j = 0; j < N; j++) {
                     double valor = random.nextDouble() * 100;
-                    pw.printf("%10.2f", valor);
+                    pw.printf("%10.0f", valor);
                 }
             pw.println("");
             }
@@ -71,7 +71,7 @@ public static void WriteFile(Matrix M, String archivo){
                 for (int i = 0; i < mm; i++) {
                         for (int j = 0; j < nn; j++) {
                                 double valor = M.GetCell(i, j);
-                                pw.printf("%10.2f", valor);
+                                pw.printf("%10.0f ", valor);
                         }
                         pw.println("");
                 }
