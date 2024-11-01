@@ -5,11 +5,10 @@ import java.util.LinkedList;
 //import java.util.Scanner;
 public class SubDeterminantesParalalelo{
     private static String FILENAME = "PARALELO_DETERMINANTES.TXT";
-    private static int M = 10;//filas
+    private static int M = 10;  //filas
     private static int N = 4;//columnas
-    //private static String KEY = "1234";
     private static double CADENA;
-    private static int BLOCK = 5; //cantidad de digitos de cada dato , el digito finales " " contando →
+    private static int BLOCK = 5; //cantidad de digitos de cada dato BLOCK-1 (3465""3654""9685), pues el byte* separador es "" ,contando de en direccion →
     private static byte[] RECORD = new byte[BLOCK]; //para la lectura de cada dato 
     private static LinkedList<Thread> hilos = new LinkedList<Thread>();
     private static double [][] A=new double[M][N];
@@ -35,11 +34,11 @@ public class SubDeterminantesParalalelo{
              i = 0;
              j = 0;
              //System.out.println(n);
-             while((k<=n-1)&&(P==-1)) { //El método java.io.RandomAccessFile.seek(long pos) establece el desplazamiento del puntero de archivo
-                 RAF.seek(k*BLOCK); //, coloca el puntero en esta posicion(posicion=es un entero)                          medido desde el comienzo de este archivo, en el que se produce la siguiente lectura o escritura.
-                 RAF.read(RECORD);  // lee la info de RAF → RECORD , si hay mas parametros llenara laa leng de RECORD      Lee hasta b.lengthbytes de datos de este archivo en una matriz de bytes.
-                 CADENA = ObtenerElemento();//RECORD = bytes[BLOCK] osea va a asignar 5 posiciones a CADENA
-                 A[i][j] =CADENA; //asignar elemento a matriz , un double de 4 cifras
+             while((k<=n-1)&&(P==-1)) {         //El método java.io.RandomAccessFile.seek(long pos) establece el desplazamiento del puntero de archivo
+                 RAF.seek(k*BLOCK);             //, coloca el puntero en esta posicion(posicion=es un entero)                          medido desde el comienzo de este archivo, en el que se produce la siguiente lectura o escritura.
+                 RAF.read(RECORD);              // lee la info de RAF → RECORD , si hay mas parametros llenara laa leng de RECORD      Lee hasta b.lengthbytes de datos de este archivo en una matriz de bytes.
+                 CADENA = ObtenerElemento();    //RECORD = bytes[BLOCK] osea va a asignar 5 posiciones a CADENA
+                 A[i][j] =CADENA;               //asignar elemento a matriz , un double de 4 cifras
                  //System.out.println(CADENA+"k="+k +" i="+i+" j="+j);
                  if(k==(N*(i+1)-1)){
                     j = 0;

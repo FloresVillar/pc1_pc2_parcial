@@ -5,14 +5,14 @@ import java.io.*;
 //import java.util.Scanner;
 public class SubDeterminantesSerial{
     private static String FILENAME = "SERIAL_DETERMINANTES.TXT";
-    private static int    M = 5;//filas
-    private static int    N = 4;//columnas
+    private static int    M = 100;                        //filas
+    private static int    N = 10;                        //columnas
     private static double CADENA;
-    private static int BLOCK = 5; //cantidad de digitos de cada dato , el digito finales " " contando →
-    private static byte[] RECORD = new byte[BLOCK]; //para la lectura de cada dato 
-    //private static LinkedList<Thread> hilos = new LinkedList<Thread>();
+    private static int BLOCK = 5;                       //cantidad de digitos de cada dato BLOCK-1 (3465""3654""9685), pues el byte* separador es "" ,contando de en direccion →
+    private static byte[] RECORD = new byte[BLOCK];     //para la lectura de cada dato 
     private static double [][] A=new double[M][N];
-    
+    //private static LinkedList<Thread> hilos = new LinkedList<Thread>();
+    //---------------------------------------------------------------------------------------------------------
     private static double ObtenerElemento() {
         String CAD;
             CAD = "";
@@ -21,7 +21,7 @@ public class SubDeterminantesSerial{
             }
             return Double.parseDouble(CAD);
         }
-
+    //-------------------------------------------------------------------------------------------------------------
     private static void AsignarDatosMatriz() {
     long n,P,T;
     int k,i,j;
@@ -34,27 +34,26 @@ public class SubDeterminantesSerial{
              i = 0;
              j = 0;
              //System.out.println(n);
-             while((k<=n-1)&&(P==-1)) { //El método java.io.RandomAccessFile.seek(long pos) establece el desplazamiento del puntero de archivo
-                 RAF.seek(k*BLOCK); //, coloca el puntero en esta posicion(posicion=es un entero)                          medido desde el comienzo de este archivo, en el que se produce la siguiente lectura o escritura.
-                 RAF.read(RECORD);  // lee la info de RAF → RECORD , si hay mas parametros llenara la leng de RECORD      Lee hasta b.lengthbytes de datos de este archivo en una matriz de bytes.
-                 CADENA = ObtenerElemento();//RECORD = bytes[BLOCK] osea va a asignar 5 posiciones a CADENA
-                 A[i][j] =CADENA; //asignar elemento a matriz , un double de 4 cifras
-                 //System.out.println(CADENA+"k="+k +" i="+i+" j="+j);
-                 if(k==(N*(i+1)-1)){      //            N=4      
-                    j = 0;              // 0 1 2 3 =N*(0+1) -1=3  hace el salto a la siguiente fila
-                    i ++;               //  mientras j 0→N-1    cuando hace el salto j=0 e i ++
+             while((k<=n-1)&&(P==-1)) {             //El método java.io.RandomAccessFile.seek(long pos) establece el desplazamiento del puntero de archivo
+                 RAF.seek(k*BLOCK);                 //, coloca el puntero en esta posicion(posicion=es un entero)                          medido desde el comienzo de este archivo, en el que se produce la siguiente lectura o escritura.
+                 RAF.read(RECORD);                  // lee la info de RAF → RECORD , si hay mas parametros llenara la leng de RECORD      Lee hasta b.lengthbytes de datos de este archivo en una matriz de bytes.
+                 CADENA = ObtenerElemento();        //RECORD = bytes[BLOCK] osea va a asignar 5 posiciones a CADENA
+                 A[i][j] =CADENA;                   //asignar elemento a matriz , un double de 4 cifras
+                 if(k==(N*(i+1)-1)){                //            N=4      
+                    j = 0;                          // 0 1 2 3 =N*(0+1) -1=3  hace el salto a la siguiente fila
+                    i ++;                           //  mientras j 0→N-1    cuando hace el salto j=0 e i ++
                  }
                  else{
-                    j++;                //caso contrario solo j ++
+                    j++;                            //caso contrario solo j ++
                  }
-                 k++;               // k ++ para posicionar el puntero y acceder al inicio del siguiente
-             }                      //bloque(dato ) en el archivo
+                 k++;                               // k ++ para posicionar el puntero y acceder al inicio del siguiente
+             }                                      //bloque(dato ) en el archivo
              RAF.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-
+    //----------------------------------------------------------------------------------------------------------------------
     public static void Gauss(double [][]a){
 		int n =a.length;
         for(int i=0;i<n-1;i++){
@@ -66,11 +65,11 @@ public class SubDeterminantesSerial{
 			}
 		}
 	}
-    
-
+    //--------------------------------------------------------------------------------------------------------------------
     public static void ImprimirMatriz(double[][]M){
         int filas=M.length;
         int columnas=M[0].length;
+        System.out.println();
         for(int i=0;i<filas;i++){
                 for(int j=0;j<columnas;j++){
                         System.out.printf("%12.2f",M[i][j]);
@@ -79,7 +78,7 @@ public class SubDeterminantesSerial{
         }
         System.out.println();
     }
-
+    //--------------------------------------------------------------------------------------------------------------------------
     public static void WriteData(int N) {       //crea la data 
     double X;
     long num;
@@ -96,7 +95,7 @@ public class SubDeterminantesSerial{
             System.out.print(E.getMessage());
         }
     }
-
+    //-------------------------------------------------------------------------------------------------------------------------------
     public static void Pregunta2(){//determinante de las submatrices
         WriteData(N);
         AsignarDatosMatriz();
@@ -105,7 +104,7 @@ public class SubDeterminantesSerial{
         if(M<N){
             //transponer matriz
         }
-        //de modo que columnas siempre menor o igual a filas?
+        //de modo que columnas siempre menor o igual a filas , no considerar ese caso(complicacion adicional)
         int filas = A.length;
         int columnas = A[0].length;
         for(int n=2;n<columnas;n++){    //la logica es nxn=dimension de la submatriz, n_maximo=columnas  
