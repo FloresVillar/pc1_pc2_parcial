@@ -1,18 +1,18 @@
 import java.io.*;  //el elemento de interés se ubica en la ultima posicion para ver los tiempos
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
-//Buenos dias. El proceso Paralelo se ubica dentro del metodo con el mismo nombre ProcesoParalelo()
+//Muy Buenos
+// El proceso Paralelo se ubica dentro del metodo con el mismo nombre ProcesoParalelo()
+// El proceso serial d eigual modo
+//----------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------
 public class PC1Preg3BusquedaSecuencialSerialParalelo{
-private static String FILENAME = "DATABUSQUEDASECUENCIAL.TXT";
+private static String FILENAME = "DATAPC1Preg3BusquedaSecuencialSerialParalelo.TXT";
 private static int    N = 1000000;
 private static String KEY = "01234567890"; //este es el elemento a buscar , se le ubica en la ultima posicion
 private static String CADENA;
 private static int BLOCK = 11;
 private static byte[] RECORD = new byte[BLOCK];
 private static LinkedList<Thread> hilos = new LinkedList<Thread>();
-//
 
     //------------------------------------------------
     private static String GetString() {

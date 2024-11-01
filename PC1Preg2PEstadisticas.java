@@ -1,5 +1,7 @@
 import java.util.LinkedList;
 import javax.swing.*;
+//--------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 public class PC1Preg2PEstadisticas{
     private static LinkedList<Thread> hilos = new LinkedList<Thread>();
 	private static double PROD [][];

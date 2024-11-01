@@ -1,18 +1,21 @@
 import java.util.LinkedList;
 import javax.swing.*;
+//-----------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------
 public class PC1Preg1PotenciaMatriz{
     private static LinkedList<Thread> hilos = new LinkedList<Thread>();
 	private static double PROD [][];
 	private static double[][] a1;
 	private static int n;
-	//--DataSet crea y almacena la matriz [n][n] en DATAPOTENCIAMATRIZ.TXT
+	//--DataSet crea y almacena la matriz [n][n] en DATAPC1Preg1PotenciaMatriz.TXT
 	//--Se realiza el calculo de la potencia p-esima de modo serial en PotenciaSerial()
 	//--Se realiza el calculo de la potencia p-esima de modo paralelo en main() 
 	//--la diferencia es distingible para matrices [1000][1000] por ejemplo, la p=3 potencia
 	//--los tiempos se muestran en segundos
 	//--los resultados de las potencias se guardan en POTENCIASERIAL.TXT   y POTENCIAPARALELA.TXT
-	//-----------------------------------------------------------------------------
-    public static void PotenciaSerial(Matrix a,int potencia){ 
+    //--se podria realizar la prueba con matrices pequeñas comparando los resultados con numpy  en python por ejemplo
+	//--------------------------------------------------------------------------------------------
+	public static void PotenciaSerial(Matrix a,int potencia){ 
 		int n=a.getRows();
 		double [][] prod=new double[n][n]; 
 		long Start = System.nanoTime();
