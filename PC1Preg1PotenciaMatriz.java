@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 import javax.swing.*;
-//-----------------------------------------------------------------------------------------------------------
+//------------------------ejecutar DataSet para crear primero los datos correspondientes-----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------
 public class PC1Preg1PotenciaMatriz{
     private static LinkedList<Thread> hilos = new LinkedList<Thread>();

@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import javax.swing.*;
+//---------------------ejecutar DataSet para crear primero los datos correspondientes-------------------------
 //---------------se realizan las estadisticas para los hilos:hil1,hil2,hil3,hil4 ----------------------------
 //----------------------------------------------------------para cada potencia-----------------------------------------------
 //ejemplo si: potencia = 3    
