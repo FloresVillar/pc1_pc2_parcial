@@ -13,8 +13,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 public class DataSet {
-static int filas = 1000;
-static int columnas = 1000;
+static int filas = 1000;         // N=1000
+static int columnas = 1000;      // N=1000
 static String DATAFILE = "DATAPC1Preg1PotenciaMatriz.TXT";
 //------------------------------------------------------
 public static void CreateFile(int M, int N) {

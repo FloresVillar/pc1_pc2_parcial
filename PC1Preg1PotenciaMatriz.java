@@ -6,14 +6,14 @@ public class PC1Preg1PotenciaMatriz{
     private static LinkedList<Thread> hilos = new LinkedList<Thread>();
 	private static double PROD [][];
 	private static double[][] a1;
-	private static int n;
-	//--DataSet crea y almacena la matriz [n][n] en DATAPC1Preg1PotenciaMatriz.TXT
+	private static int N;
+	//--DataSet crea y almacena la matriz [n=1000][n=1000] en DATAPC1Preg1PotenciaMatriz.TXT
 	//--Se realiza el calculo de la potencia p-esima de modo serial en PotenciaSerial()
 	//--Se realiza el calculo de la potencia p-esima de modo paralelo en main() 
-	//--la diferencia es distingible para matrices [1000][1000] por ejemplo, la p=3 potencia
+	//--la diferencia es distingible para matrices [1000][1000] por ejemplo para p=3 potencia
 	//--los tiempos se muestran en segundos
 	//--los resultados de las potencias se guardan en POTENCIASERIAL.TXT   y POTENCIAPARALELA.TXT
-    //--se podria realizar la prueba con matrices pequeñas comparando los resultados con numpy  en python por ejemplo
+    //--se podria realizar la prueba con matrices pequeñas comparando los resultados con numpy en python por ejemplo(se hizo para una matriz pequeña)
 	//--------------------------------------------------------------------------------------------
 	public static void PotenciaSerial(Matrix a,int potencia){ 
 		int n=a.getRows();
@@ -76,21 +76,21 @@ public class PC1Preg1PotenciaMatriz{
         Matrix a = new Matrix(a1);
         int potencia;
         potencia=Integer.parseInt(JOptionPane.showInputDialog(null," ingresa la potencia"));
-        PotenciaSerial(a,potencia);		//llama a potencia serial
-        n = a1.length;
-        PROD= new double[n][n];
-        double[][] b = new double[n][n];
+        PotenciaSerial(a,potencia);		//llama a proceso serial
+        N = a1.length;
+        PROD= new double[N][N];
+        double[][] b = new double[N][N];
         Asignar(PROD,a1);
-		long Start = System.nanoTime();
+		long Start = System.nanoTime();	//proceso paralelo
 		for(int p=0;p<potencia-1;p++){
 			hilos.clear();
 			Asignar(b,PROD);			
 			double[][] temp1;
 			double[][] temp2;
-			double[][] temp3;
+			double[][] temp3;			  // este analisis maneja si N es par o impar
 			double[][] temp4;			  // mitad = (int)n/2 + r={0,1}   y esto en los indices pero era menos legible
-			int mitad = (int)n/2 + (n%2); //para n par n/2    para  n impar n/2 + 1
-			if(n%2==0){					  // mitad =2  si n=4    mitad=3 si n=5
+			int mitad = (int)N/2 + (N%2); //para n par n/2    para  n impar n/2 + 1
+			if(N%2==0){					  // mitad =2  si n=4    mitad=3 si n=5
 				temp1 = new double[mitad][mitad];
 				temp2 = new double[mitad][mitad];
 				temp3 = new double[mitad][mitad];
@@ -107,7 +107,7 @@ public class PC1Preg1PotenciaMatriz{
         	for(int i=0;i<mitad;i++){
         		for(int j=0;j<mitad;j++){
         			double suma=0;
-					for(int k=0;k<n;k++){
+					for(int k=0;k<N;k++){
         				suma+=a1[i][k]*b[k][j];
         			}
 					temp1[i][j]=suma;
@@ -119,9 +119,9 @@ public class PC1Preg1PotenciaMatriz{
 			Thread hil2 = new Thread(new Runnable(){
 			public void run(){
         		for(int i=0;i<mitad;i++){
-        			for(int j=mitad;j<n;j++){
+        			for(int j=mitad;j<N;j++){
         				double suma=0;
-						for(int k=0;k<n;k++){
+						for(int k=0;k<N;k++){
         					suma+=a1[i][k]*b[k][j];
         				}
 						temp2[i][j-mitad]=suma;
@@ -132,10 +132,10 @@ public class PC1Preg1PotenciaMatriz{
 			hilos.add(hil2);
 			Thread hil3 = new Thread(new Runnable(){
 			public void run(){
-        		for(int i=mitad;i<n;i++){
+        		for(int i=mitad;i<N;i++){
         			for(int j=0;j<mitad;j++){
         				double suma=0;
-						for(int k=0;k<n;k++){
+						for(int k=0;k<N;k++){
         					suma+=a1[i][k]*b[k][j];
         				}
 						temp3[i-mitad][j]=suma;
@@ -146,10 +146,10 @@ public class PC1Preg1PotenciaMatriz{
 			hilos.add(hil3);
 			Thread hil4 = new Thread(new Runnable(){
 			public void run(){
-        		for(int i=mitad;i<n;i++){
-        			for(int j=mitad;j<n;j++){
+        		for(int i=mitad;i<N;i++){
+        			for(int j=mitad;j<N;j++){
         				double suma=0;
-						for(int k=0;k<n;k++){
+						for(int k=0;k<N;k++){
         					suma+=a1[i][k]*b[k][j];
         				}
 						temp4[i-mitad][j-mitad]=suma;
@@ -168,14 +168,14 @@ public class PC1Preg1PotenciaMatriz{
 				}catch(InterruptedException e){
 					e.printStackTrace();
 				}						
-			}			//ahora reemzamblando a PROD
-			for (int i = 0; i < mitad; i++) {
-				System.arraycopy(temp1[i], 0, PROD[i], 0, mitad); //n par n=4 mitad=2
-				System.arraycopy(temp2[i], 0, PROD[i], mitad, n/2);		//n=5 impar mitad=3
+			}			//ahora reemzamblando a PROD, java proporciona este metodo corroborado
+			for (int i = 0; i < mitad; i++) {										//ejemplo 	
+				System.arraycopy(temp1[i], 0, PROD[i], 0, mitad); //N par n=4 mitad=2
+				System.arraycopy(temp2[i], 0, PROD[i], mitad, N/2);		//N=5 impar mitad=3
 			}																	//[3][3]    [3][2]
-			for (int i = 0; i < n / 2; i++) {									//[2][3]	[2][2]	
+			for (int i = 0; i < N / 2; i++) {									//[2][3]	[2][2]	
 				System.arraycopy(temp3[i], 0, PROD[i + mitad], 0, mitad);
-				System.arraycopy(temp4[i], 0, PROD[i + mitad], mitad, n / 2);
+				System.arraycopy(temp4[i], 0, PROD[i + mitad], mitad, N / 2);
 			}
 		}
 		long end = (System.nanoTime()-Start)/1000000;

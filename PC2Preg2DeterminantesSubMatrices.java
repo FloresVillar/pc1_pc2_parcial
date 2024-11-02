@@ -1,18 +1,20 @@
 import java.io.*;
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-//el ProcesoParalelo no imprime las submatrices pues resulta un embrollo
-//unicamente calcula las subamtrices y sus determinantes
+//------este programa calcula los determinantes de una matriz rectangular MxN----------------------------------------------------------------------
+//------los tamaños de las submatrices son n:2,3,4,5  estas submatrices son todas las matrices
+//------cuadradas posibles de los tamaños mencionados---------------------------------------------
+//------el ProcesoParalelo() no imprime las submatrices pues resulta un embrollo, unicamente calcula las submatrices y sus determinantes
 //-----------------------------------------------------------------------------------------------------------
-//---se imprime las submatrices del siguiente modo
-//---submatriz nxn "dimension"   en (ubicacion del elemetno[0][0]) de donde se "expande" para ser una matriz cuadrada
-//-------------------------------------------------------------------------------------------------------------------
+//------el ProcesoSerial() imprime las submatrices del siguiente modo:
+//------submatriz nxn en (ubicacion del elemento[0][0]) desde donde se "expande" una matriz cuadrada 
+//------si  se quiere imprimir dichas submatrices se podria descomentar imprimirMatriz(subM); en linea 87  --------------------------------------
+//----------------------------------------------------------------dentro de DeterminantesSubMatricesSerial()---------------------------
+//--------------------------------------------------------------------------------------------------------------
 public class PC2Preg2DeterminantesSubMatrices{
-    private static String FILENAME = "DATAPC2Preg2DeterminantesSubMatrices.TXT"; 
-    private static int    M = 20;                        //filas   M>=N
-    private static int    N = 10;                   //IMPORTANTE aunque manejable↓
-    private static int H =4 ;                        //columnas siempre menor que las filas y N>=5 
-    private static double CADENA;                        // pues las submatrices dimension 2,3,4,5  
+    private static String FILENAME = "DATAPC2Preg2DeterminantesSubMatrices.TXT";    
+    private static int    M = 300;           //filas   M>=N  y  N>=5 pues las submatrices dimension 2,3,4,5   
+    private static int    N = 150;           //IMPORTANTE ↑      
+    private static int H =4 ;                         
+    private static double CADENA;                        
     private static int BLOCK = 5;                       //cantidad de digitos de cada dato BLOCK-1 (3465""3654""9685), pues el byte* separador es "" ,contando de en direccion →
     private static byte[] RECORD = new byte[BLOCK];     //para la lectura de cada dato 
     private static double [][] A=new double[M][N]; 
@@ -83,15 +85,15 @@ public class PC2Preg2DeterminantesSubMatrices{
                 double[][] subM = new double[n][n];
                 for (int i = 0; i < n; i++) {
                     System.arraycopy(A[filaInicio + i], columnaInicio, subM[i], 0, n);
-                }
-                imprimirMatriz(subM);       //incluso si se comenta esta linea , el tiempo paralelo es menor
+                }       //incluso con esta linea comentado ↓ , el tiempo serial es mayor,descomentar para ver detalles(matrices pequeñas)
+                //imprimirMatriz(subM);       
                 double determinante = Determinante(subM);
-                System.out.println("Submatriz " + n + "x" + n + " en (" + filaInicio + "," + columnaInicio + ") - Determinante: " + determinante);
+                System.out.println("(serial)Submatriz " + n + "x" + n + " en (" + filaInicio + "," + columnaInicio + ") - Determinante: " + determinante);
             }
         }
     }
     //--------------------------------------------------------------------------------------------------------
-    //--como se mencionó , no se imprimen las submatrices pues resulta confuso
+    //--como se menciona, no se imprimen las submatrices pues resulta confuso
     public static void DeterminantesSubMatricesParalelo(int n) {
         for (int filaInicio = 0; filaInicio <= M - n; filaInicio++) {
             for (int columnaInicio = 0; columnaInicio <= N - n; columnaInicio++) {
@@ -101,7 +103,7 @@ public class PC2Preg2DeterminantesSubMatrices{
                 }
                 double determinante = Determinante(subM);
                 synchronized(System.out){
-                    System.out.println("Submatriz " + n + "x" + n + " en (" + filaInicio + "," + columnaInicio + ") - Determinante: " + determinante);}
+                    System.out.println("(paralelo)Submatriz " + n + "x" + n + " en (" + filaInicio + "," + columnaInicio + ") - Determinante: " + determinante);}
             }
         }
     }
@@ -114,7 +116,7 @@ public class PC2Preg2DeterminantesSubMatrices{
         }
         System.out.println("fin de proceso Serial\n");
     }
-    //-------------------------------------------------------------------------------------------------------
+    //-----------------------un hilo para cada tamaño n:2,3,4,5 -------------------------------------------------------------------------------
     public static void ProcesoParalelo() { 
         hilos[0] = new Thread(()->DeterminantesSubMatricesParalelo(2));
         hilos[1] = new Thread(()->DeterminantesSubMatricesParalelo(3));
@@ -181,10 +183,10 @@ public class PC2Preg2DeterminantesSubMatrices{
         }
     }
     //------------------------------------------------------------------------------------------------------------------
-    public static void main(String[] args) {
+    public static void main(String[] args) {        //descomentar "//\\" para visualizar matrices pequeñas
         WriteData();
         AsignarDatosMatriz();
-        imprimirMatriz(A);
+        //\\imprimirMatriz(A);
         long start = System.nanoTime();
         ProcesoSerial(); 
         long endSerial = (System.nanoTime()-start)/1000000;

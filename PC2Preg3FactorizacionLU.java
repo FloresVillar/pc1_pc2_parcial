@@ -4,13 +4,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
-//import javax.swing.*;
-//-----N TIENE QUE PAR pues la matriz de va a dividir en 4 partes y reemzamblar luego de trabajar los bloques---------------------------------------------------------------------------------------------------
-//-----se puede añadir algo de complejidad para manejar matrices impares(no es el caso actual)---------------------------------------------------------------------------------------------------
-//---el resultado del proceso serial se obtiene en main serial()--usa directamente doolitle con A como arg
+//------																				  A11 A12								
+//-----calculo de la fatorizacion LU serial en doolitle()------LU paralelo en LuBloques() A21 A22 
+//-----N TIENE QUE PAR pues la matriz de va a dividir en 4 partes y reemzamblar luego de trabajar los bloques--------
+//-----se puede añadir algo de complejidad para manejar matrices impares(no es el caso actual)-----------------------
+//---el resultado del proceso serial se obtiene en main serial()--usa directamente doolitle con AA como arg
 //---el resultado del proceso paralelo se obtiene en main paralelo()--usa doolitle por bloques
 public class PC2Preg3FactorizacionLU{
-	private static String FILENAME = "DATAPC2Preg3FactorizacionLU.TXT"; 
+	private static String FILENAME = "DATAPC2Preg3FactorizacionLU.TXT"; //se crea la DATA y se guarda en FILENAME
     private static int    N =2500;              //se recomienda N>2000 pero N<<10000     
     private static int H =4 ;                   //para N=10000 la laptop colapsa    
     private static double CADENA;                       
@@ -191,9 +192,9 @@ public class PC2Preg3FactorizacionLU{
 		m.A22=resta(m.A22 , L21U12.PROD); 				//actualizacion schur A22 = A22 - L21*U12
 		Result lu22= Doolitle(m.A22);					//doolitle(A22) podria implementar una recursividad 
 		double[][]L= Lglobal(lu.L, L21, lu22.L);		//ensamblar los L(L12=0) y ensamblar los U(U21=0)								
-		double[][]U= Uglobal(lu.U, U12, lu22.U);
-		return new Result(L, U);						// resultado LU paralelo
-	}
+		double[][]U= Uglobal(lu.U, U12, lu22.U);		//				lu.L   0				 lu.U	U12	
+		return new Result(L, U);						//		 L  =						U =
+	}													// 				L21   lu.22.L			   0	lu.22.U			 
 	//-----------------------------------------------------------------------------------------------------
 	public static double[][] Lglobal(double[][] L11, double[][] L21, double[][] L22) {
     	int n = L11.length + L21.length;

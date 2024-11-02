@@ -1,7 +1,14 @@
 import java.util.LinkedList;
 import javax.swing.*;
-//--------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------
+//---------------se realizan las estadisticas para los hilos:hil1,hil2,hil3,hil4 ----------------------------
+//----------------------------------------------------------para cada potencia-----------------------------------------------
+//ejemplo si: potencia = 3    
+//				tiempos(Tk)
+//        		 n=2	   n=3
+//		  hilo1: 3644     3592     tiempo total  7236 milisegundos
+//        hilo2: 3662     3591     tiempo total  7253 milisegundos
+//        hilo3: 3669     3553     tiempo total  7222 milisegundos
+//        hilo4: 3549     3582     tiempo total  7131 milisegundos
 public class PC1Preg2PEstadisticas{
     private static LinkedList<Thread> hilos = new LinkedList<Thread>();
 	private static double PROD [][];

@@ -1,10 +1,10 @@
 import java.io.*;  //el elemento de interés se ubica en la ultima posicion para ver los tiempos
 import java.util.LinkedList;
 //Muy Buenos
-// El proceso Paralelo se ubica dentro del metodo con el mismo nombre ProcesoParalelo()
-// El proceso serial d eigual modo
-//----------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------
+// El proceso serial se ubica dentro del metodo ProcesoSerial()
+// El proceso Paralelo se ubica dentro del metodo ProcesoParalelo()
+//-----------se paraleliza(separa) la longitud de la busqueda en H=4 hilos(partes)---------------------
+//-----------------------------------------------------------------------------------------------------
 public class PC1Preg3BusquedaSecuencialSerialParalelo{
 private static String FILENAME = "DATAPC1Preg3BusquedaSecuencialSerialParalelo.TXT";
 private static int    N = 1000000;
@@ -13,8 +13,7 @@ private static String CADENA;
 private static int BLOCK = 11;
 private static byte[] RECORD = new byte[BLOCK];
 private static LinkedList<Thread> hilos = new LinkedList<Thread>();
-
-    //------------------------------------------------
+    //------------------------------------------------------------------------------------
     private static String GetString() {
     String CAD;
         CAD = "";
@@ -23,7 +22,7 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
         }
         return CAD;
     }
-    //------------------------------------------------
+    //-------------------------------------------------------------------------------------
     /*private static void PrintRecord() {
         CADENA = "";
         for(int i=0;i<=10;i++) {
@@ -31,7 +30,7 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
         }
         System.out.println(CADENA);
     }*/
-    //------------------------------------------------
+    //--------------------------------------------------------------------------------------
     private static void ProcesoSerial() {
     System.out.println();
     long n,P,T,Time1,Time2;
@@ -65,7 +64,7 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
             ex.printStackTrace();
         }
     }
-// procesamiento paralelo..
+    // ------------procesamiento paralelo-----------------------------------------------------------------
     private static void ProcesoParalelo(){
         Thread hil1 = new Thread(new Runnable(){
 			public void run(){    
@@ -220,12 +219,11 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
 				}						
 			}
     }
-//Los resultados indican que el ultimo hilo encentra lo buscado(aunque no necesariamente se imprime en orden hilo1, hilo2, hilo3,hilo4) 
-//con un tiempo  que aproximadamente la cuarta parte para cada hilo, lo cual es genial 
-
-    
-
-    public static String ReadFile() { //obtiene la info , supongo ,,,,,,investigar despues
+    //Los resultados indican que el ultimo hilo encuentra lo buscado
+    //(aunque no necesariamente se imprime en orden hilo1, hilo2, hilo3,hilo4) 
+    //con un tiempo  que aproximadamente la cuarta parte para cada hilo, lo cual es genial 
+    //------------------------------------------------------------------------------------------
+    public static String ReadFile() { 
     String LINE="",CADENA="";
        try {
          File FILE = new File(FILENAME);
@@ -239,7 +237,7 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
        }
        return CADENA;
     }
-
+    //-------------------------------------------------------------------------------------------------------
     public static void WriteData(int N) {       //crea la data
     double X;
     long num;
@@ -258,13 +256,11 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
         }
     }
 
-
-    //--------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     public static void main(String[] args) {
       WriteData(N);
       ProcesoSerial();
       System.out.println();
       ProcesoParalelo();
     }
-
 }
