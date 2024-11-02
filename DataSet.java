@@ -1,10 +1,3 @@
-/* Realizar un programa Java serial y paralelo 
-(usando hilos explícitos creados e instanciados en el 
-programa) para solucionar el problema de la 
-descomposición matricial QR de una matriz cuadrada 
-NxN (). Verificar que los resultados sean equivalentes
- y comparar los tiempos de ejecución.
-PROGRAMA QUE GENERA LOS DATOS*/
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
