@@ -88,7 +88,7 @@ public class PC1Preg1PotenciaMatriz{
 			double[][] temp1;
 			double[][] temp2;
 			double[][] temp3;
-			double[][] temp4;
+			double[][] temp4;			  // mitad = (int)n/2 + r={0,1}   y esto en los indices pero era menos legible
 			int mitad = (int)n/2 + (n%2); //para n par n/2    para  n impar n/2 + 1
 			if(n%2==0){					  // mitad =2  si n=4    mitad=3 si n=5
 				temp1 = new double[mitad][mitad];
@@ -168,7 +168,7 @@ public class PC1Preg1PotenciaMatriz{
 				}catch(InterruptedException e){
 					e.printStackTrace();
 				}						
-			}
+			}			//ahora reemzamblando a PROD
 			for (int i = 0; i < mitad; i++) {
 				System.arraycopy(temp1[i], 0, PROD[i], 0, mitad); //n par n=4 mitad=2
 				System.arraycopy(temp2[i], 0, PROD[i], mitad, n/2);		//n=5 impar mitad=3
