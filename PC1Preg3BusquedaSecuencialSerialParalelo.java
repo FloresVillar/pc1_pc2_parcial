@@ -56,10 +56,10 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
                 System.out.println("Elemento " + KEY + " Existente en la Posicion " + P);
              }
              else {
-                System.out.println("Elemento " + KEY + " No Existe");
+                System.out.println("Elemento " + KEY + " No encontrado");
              }
              Time2 = System.currentTimeMillis();
-             System.out.printf("Tiempo de Procesamiento Serial: %d%n", (Time2-Time1));
+             System.out.printf("Tiempo de Procesamiento Serial: %d", (Time2-Time1));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -91,10 +91,10 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
                        System.out.println("Elemento " + KEY + " Existente en la Posicion " + P);
                     }
                     else {
-                       System.out.println("Elemento " + KEY + " No Existe");
+                       System.out.println("Elemento " + KEY + " No encontrado");
                     }
                     Time2 = System.currentTimeMillis();
-                    System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hilo-1: %d%n", (Time2-Time1));
+                    System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hilo-1: %d", (Time2-Time1));
                } catch (IOException ex) {
                    ex.printStackTrace();
                }
@@ -127,7 +127,7 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
                        System.out.println("Elemento " + KEY + " Existente en la Posicion " + P);
                     }
                     else {
-                       System.out.println("Elemento " + KEY + " No Existe");
+                       System.out.println("Elemento " + KEY + " No encontrado");
                     }
                     Time2 = System.currentTimeMillis();
                     System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hillo-2: %d%n", (Time2-Time1));
@@ -163,10 +163,10 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
                        System.out.println("Elemento " + KEY + " Existente en la Posicion " + P);
                     }
                     else {
-                       System.out.println("Elemento " + KEY + " No Existe");
+                       System.out.println("Elemento " + KEY + " No encontrado");
                     }
                     Time2 = System.currentTimeMillis();
-                    System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hilo-3: %d%n", (Time2-Time1));
+                    System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hilo-3: %d", (Time2-Time1));
                } catch (IOException ex) {
                    ex.printStackTrace();
                }
@@ -200,10 +200,10 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
                        System.out.print("\nElemento " + KEY + " Existente en la Posicion " + P);
                     }
                     else {
-                       System.out.print("Elemento " + KEY + " No Existe");
+                       System.out.print("Elemento " + KEY + " No encontrado");
                     }
                     Time2 = System.currentTimeMillis();
-                    System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hilo-4: %d%n\n", (Time2-Time1));
+                    System.out.printf("Tiempo de Procesamiento Serial(Paralelo) hilo-4: %d\n", (Time2-Time1));
                } catch (IOException ex) {
                    ex.printStackTrace();
                }
@@ -259,8 +259,9 @@ private static LinkedList<Thread> hilos = new LinkedList<Thread>();
     //----------------------------------------------------------------------------------------------------
     public static void main(String[] args) {
       WriteData(N);
+      System.out.println("\nelemento buscado :"+ KEY);
       ProcesoSerial();
-      System.out.println();
+      System.out.println("\n");
       ProcesoParalelo();
     }
 }

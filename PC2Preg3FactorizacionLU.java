@@ -11,7 +11,7 @@ import java.util.*;
 //---el resultado del proceso serial se obtiene en main serial()--usa directamente doolitle con AA como arg
 //---el resultado del proceso paralelo se obtiene en main paralelo()--usa doolitle por bloques
 public class PC2Preg3FactorizacionLU{
-	private static String FILENAME = "DATAPC2Preg3FactorizacionLU.TXT"; //se crea la DATA y se guarda en FILENAME
+	private static String FILENAME = "DATAPC2Preg3FactorizacionLU.TXT"; 	//se crea la DATA y se guarda en FILENAME
     private static int    N =2500;              //se recomienda N>2000 pero N<<10000     
     private static int H =4 ;                   //para N=10000 la laptop colapsa    
     private static double CADENA;                       

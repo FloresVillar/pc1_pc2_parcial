@@ -11,8 +11,8 @@ import java.io.*;
 //--------------------------------------------------------------------------------------------------------------
 public class PC2Preg2DeterminantesSubMatrices{
     private static String FILENAME = "DATAPC2Preg2DeterminantesSubMatrices.TXT";    
-    private static int    M = 300;           //filas   M>=N  y  N>=5 pues las submatrices dimension 2,3,4,5   
-    private static int    N = 150;           //IMPORTANTE ↑      
+    private static int    M = 200;           //filas   M>=N  y  N>=5 pues las submatrices dimension 2,3,4,5   
+    private static int    N = 100;           //IMPORTANTE ↑      
     private static int H =4 ;                         
     private static double CADENA;                        
     private static int BLOCK = 5;                       //cantidad de digitos de cada dato BLOCK-1 (3465""3654""9685), pues el byte* separador es "" ,contando de en direccion →
