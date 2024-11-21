@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 //------																				  A11 A12								
 //-----calculo de la fatorizacion LU serial en doolitle()------LU paralelo en LuBloques() A21 A22 
 //-----N TIENE QUE PAR pues la matriz de va a dividir en 4 partes y reemzamblar luego de trabajar los bloques--------
@@ -12,7 +14,7 @@ import java.util.*;
 //---el resultado del proceso paralelo se obtiene en main paralelo()--usa doolitle por bloques
 public class PARCIALPreg4FactorizacionLU{
 	private static String FILENAME = "DATAPARCIALPreg4FactorizacionLU.TXT"; 	//se crea la DATA y se guarda en FILENAME
-    private static int    N =2500;              //se recomienda N>2000 pero N<<10000     
+    private static int    N =50;              //se recomienda N>2000 pero N<<10000     
     private static int H =4 ;                   //para N=10000 la laptop colapsa    
     private static double CADENA;                       
     private static int BLOCK = 5;                       //tamaño de cada dato BLOCK-1     
@@ -113,7 +115,7 @@ public class PARCIALPreg4FactorizacionLU{
 	}
 	//--------------------------------------------------------------------------------------------------------------  	  
 	public static Result LuBloques(double [][]M){
-		 //cuatro for's para la asignacion de los 4 cudrantes , 		A11 A12
+		 //cuatro for's para la asignacion de los 4 cuadrantes , 		A11 A12
 		 // este proceso se paraleliza , justamente con H=4 hilos		A21	A22	 
 	     final Matrices m = new Matrices();
 		 Thread h1 = new Thread(new Runnable(){
