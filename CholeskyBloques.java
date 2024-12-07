@@ -20,9 +20,10 @@ public class CholeskyBloques {
     private static byte [] RECORD = new byte[BLOCK];
     private static String FILENAMEMATRIZ = "DATACholeskyBloques.TXT";
     private static String FILENAMEX = "DATACholeskyX.TXT";
-    private static int N_global = 12;
+    private static int N_global = 12; //multiplo de 4 y PAR es importante que sea PAR
     private static String CADENA;
     private static double [][] A_Global =new double[N_global][N_global];
+    private static double [][]LGlobal = new double[N_global][N_global];
     private static LinkedList<Thread> hilos = new LinkedList<>();
     private static int NB = 4;
     private static int k_global=N_global/NB;
@@ -118,8 +119,8 @@ public class CholeskyBloques {
         }
         }
     */
-    /* 
-        DataSetCholesky dataGlobal = new DataSetCholesky("DATASETCHOLESKY.TXT", 12, 12, 3, "FileWriter");
+    
+        DataSetCholesky dataGlobal = new DataSetCholesky("DATASETCHOLESKY.TXT", N_global, N_global, BLOCK-1, "FileWriter");
         A_Global = dataGlobal.ReadDataRAF();
         Imprimir("A con DataSetCholseky", A_Global);
         ObtenerABloques();
@@ -158,18 +159,18 @@ public class CholeskyBloques {
         CopiarBloque(LBloquesF, L22, 4, 4);  // L22 -> posición (4, 4)
         CopiarBloque(LBloquesF, L32, 8, 4);  // L32 -> posición (8, 4)
         CopiarBloque(LBloquesF, L33, 8, 8);
-        Imprimir("LBloques reemzamblado", LBloquesF);
+        Imprimir("LGlobal manual ", LBloquesF);
         //corroborando con choleskySerial
         double[][]ASerial = Copiar(A_Global);
         Imprimir("factorizacion cholesky Serial",CholeskySerial(ASerial));
-    */        
+            
         //LOS RESULTADOS INDICAN QUE TODO ES CORRECTO LO CUAL ES GENIAL GENIAL GENIAL !!!
             //EL TESTEO ANTERIOR SE HIZO DE FORMA NO ITERADA PASO A PASO y RESULTA EN LA OBTENCION DE LOS LBLOQUES
             //AHORA SE INTENTA LA FORMA ITERADA y RESULTA UN ERROR en el manejo de los indices seguramente FALTA CORREGIR ELLO
             //UNICAMENTE SE REQUIERE CORREGIR EL MANEJO DE LOS INDICES DENTRO DE LOS FOR DE Choleskybloques()
     
-        DataSetCholesky dataGlobal = new DataSetCholesky("DATASETCHOLESKY.TXT", 12, 12, 3, "FileWriter");
-        A_Global = dataGlobal.ReadDataRAF();
+        //DataSetCholesky dataGlobal = new DataSetCholesky("DATASETCHOLESKY.TXT", 12, 12, 3, "FileWriter");
+    /*  A_Global = dataGlobal.ReadDataRAF();
         Imprimir("A con DataSetCholseky", A_Global);
         ObtenerABloques();
        for(int i=0;i<ABloques.length;i++){
@@ -177,23 +178,52 @@ public class CholeskyBloques {
                 Imprimir("ABloques",ABloques[i][j]); 
             }
         } 
-        Choleskybloques();
-        for(int i=0;i<ABloques.length;i++){
+    */
+        Choleskybloques();  //CORREGIDO , funciona perfectamente, solo se trataba de un tema de indices, se corroboran que los 3 resultados
+        // Cholesky manual*   cholesky serial   choleskyBloques  DAN LA MISMA TRIAANGULAR INFERIOR
+    /*  for(int i=0;i<ABloques.length;i++){
             for(int j=0;j<ABloques[0].length;j++){
                 Imprimir("LBloques",LBloques[i][j]); 
             }
         }
-
+    */
+        ObtenerLGlobal();
+        Imprimir("LGlobal iteracion", LGlobal);        //EL METODO ObtenerLGlobal sigue el mismo planteamiento , se trabaja por columnas k, hacia abajo  y las filas de los bloques
     }
     //-------------------------------------------------------------------------------
     public static void ObtenerLGlobal(){
-        for(int k=0;k<k_global;k++){
-           for(int abajo=k*NB;abajo<k_global;abajo++){
-                for(int filas=abajo;filas<(abajo+1)*NB;filas++){
-                    
+    /*     for(int k=0;k<k_global;k++){
+           for(int filas=k;filas<k_global;filas++){
+                for(int fil=0;fil<NB;fil++){                      ↓determina la fila  ↓determina la columna
+                   System.arraycopy(LBloques[filas][k][fil], 0, LGlobal[filas*NB+fil],k*NB, NB); 
                 }
            } 
         }
+    */  
+        Thread [] columnas = new Thread[k_global];
+        for(int hil=0;hil<columnas.length;hil++){
+            final int  hilo =hil;
+            columnas[hilo] = new Thread(new Runnable(){
+                public void run(){
+                    for(int filas=hilo;filas<k_global;filas++){
+                        for(int fil=0;fil<NB;fil++){
+                            System.arraycopy(LBloques[filas][hilo][fil], 0, LGlobal[NB*filas+fil], hilo*NB, NB);
+                        }
+                    }
+                }
+            });
+        }
+        for (Thread thread : columnas) {
+            thread.start();
+        }
+        for (Thread thread : columnas) {
+            try{
+                thread.join();
+            }catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+        }
+    
     }
     //-------------------------------------------------------------------------------
     public static void Choleskybloques(){
