@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Random;
@@ -14,13 +15,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 import java.io.BufferedReader;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 //==============================================================================================
 public class CholeskyBloques {
     private static int BLOCK = 5; //tamaño de datos BLOCK -1=3, el ultimo 'digito' es " ",al generar la simetrica el tamaño se duplica
     private static byte [] RECORD = new byte[BLOCK];
     private static String FILENAMEMATRIZ = "DATACholeskyBloques.TXT";
     private static String FILENAMEX = "DATACholeskyX.TXT";
-    private static int N_global = 12; //multiplo de 4 y PAR es importante que sea PAR
+    private static int N_global = 1000; //multiplo de 4 y PAR es importante que sea PAR
     private static String CADENA;
     private static double [][] A_Global =new double[N_global][N_global];
     private static double [][]LGlobal = new double[N_global][N_global];
@@ -119,7 +123,7 @@ public class CholeskyBloques {
         }
         }
     */
-    
+    /* 
         DataSetCholesky dataGlobal = new DataSetCholesky("DATASETCHOLESKY.TXT", N_global, N_global, BLOCK-1, "FileWriter");
         A_Global = dataGlobal.ReadDataRAF();
         Imprimir("A con DataSetCholseky", A_Global);
@@ -163,7 +167,7 @@ public class CholeskyBloques {
         //corroborando con choleskySerial
         double[][]ASerial = Copiar(A_Global);
         Imprimir("factorizacion cholesky Serial",CholeskySerial(ASerial));
-            
+    */        
         //LOS RESULTADOS INDICAN QUE TODO ES CORRECTO LO CUAL ES GENIAL GENIAL GENIAL !!!
             //EL TESTEO ANTERIOR SE HIZO DE FORMA NO ITERADA PASO A PASO y RESULTA EN LA OBTENCION DE LOS LBLOQUES
             //AHORA SE INTENTA LA FORMA ITERADA y RESULTA UN ERROR en el manejo de los indices seguramente FALTA CORREGIR ELLO
@@ -179,7 +183,7 @@ public class CholeskyBloques {
             }
         } 
     */
-        Choleskybloques();  //CORREGIDO , funciona perfectamente, solo se trataba de un tema de indices, se corroboran que los 3 resultados
+          //CORREGIDO , funciona perfectamente, solo se trataba de un tema de indices, se corroboran que los 3 resultados
         // Cholesky manual*   cholesky serial   choleskyBloques  DAN LA MISMA TRIAANGULAR INFERIOR
     /*  for(int i=0;i<ABloques.length;i++){
             for(int j=0;j<ABloques[0].length;j++){
@@ -187,8 +191,14 @@ public class CholeskyBloques {
             }
         }
     */
-        ObtenerLGlobal();
-        Imprimir("LGlobal iteracion", LGlobal);        //EL METODO ObtenerLGlobal sigue el mismo planteamiento , se trabaja por columnas k, hacia abajo  y las filas de los bloques
+    DataSetCholesky dataGlobal = new DataSetCholesky("DATASETCHOLESKY.TXT", N_global, N_global, BLOCK-1, "FileWriter");
+    A_Global = dataGlobal.ReadDataRAF();
+    Imprimir("AGlobal", A_Global);
+    ObtenerABloques();
+    Choleskybloques();
+    ObtenerLGlobal();
+    Imprimir("LGlobal iteracion", LGlobal);        
+    Imprimir("L serial", CholeskySerial(Copiar(A_Global)));
     }
     //-------------------------------------------------------------------------------
     public static void ObtenerLGlobal(){
@@ -199,7 +209,7 @@ public class CholeskyBloques {
                 }
            } 
         }
-    */  
+    */  //EL METODO ObtenerLGlobal sigue el mismo planteamiento , se trabaja por columnas k, hacia abajo  y las filas de los bloques
         Thread [] columnas = new Thread[k_global];
         for(int hil=0;hil<columnas.length;hil++){
             final int  hilo =hil;
@@ -227,32 +237,67 @@ public class CholeskyBloques {
     }
     //-------------------------------------------------------------------------------
     public static void Choleskybloques(){
-        //ObtenerABloques();
-        /*
-        for(int i=0;i<ABloques.length;i++){
-            for(int j=0;j<ABloques[0].length;j++){
-                Imprimir("ABloques",ABloques[i][j]); 
-            }
-        }
-        */
         for(int j=0;j<k_global;j++){
             System.out.println("k = "+(j+1));
             LBloques[j][j] =CholeskySerial(ABloques[j][j]);
             Imprimir("LBLOQUE[j][j]",LBloques[j][j]);
             //trsm L21=A21 L11^-t       y   
-            //trsm L31 =A31 L11^-t      y  
-            for(int i=j+1;i<k_global;i++){
-                System.out.printf("hacia abajo ↓ %d\t",i); 
-                LBloques[i][j] = TRSM(ABloques[i][j],LBloques[j][j]); //
-            }
+            //trsm L31 =A31 L11^-t      y 
+            final int jj= j;
+            CompletableFuture<Void> trsm =CompletableFuture.runAsync(()->{
+                Thread[]Trsm = new Thread[k_global-(jj+1)];
+                for(int hil =0;hil<Trsm.length;hil++){
+                    final int hill = hil;
+                    Trsm[hill] = new Thread(new Runnable() {             //                     for(int i=j+1;i<k_global;i++){
+                        public void run(){                              //                          LBloques[i][j] = TRSM(ABloques[i][j],LBloques[j][j]); 
+                            System.out.printf("hacia abajo  %d\n",(jj+1)+hill);         //}          i←jj+1+hill                      //paralelizar 
+                            LBloques[(jj+1)+hill][jj] = TRSM(ABloques[(jj+1)+hill][jj],LBloques[jj][jj]);               
+                        }
+                    });
+                }
+                for (Thread thread : Trsm) {
+                    thread.start();
+                }
+                for (Thread thread : Trsm) {
+                    try{
+                        thread.join();
+                    }catch(InterruptedException e){
+                        Thread.currentThread().interrupt();
+                    }
+                }  
+            });  
             //syrk A22=A22 -  L21L21^t,    paralelizar
             //syrk A32=A32 - L31 L21^t
             //syrk A33=A33 -  L31L31^t
-            for(int i=j+1;i<k_global;i++){
-                System.out.printf("en las diagonales y ↓ %d\t",i);
-                for(int ii=i;ii<k_global;ii++){
-                    ABloques[ii][i] = SYRK(ABloques[ii][i],LBloques[ii][j],LBloques[i][j]);
+            CompletableFuture<Void> syrk = trsm.thenRunAsync(()->{
+                Thread[]Syrk = new Thread[k_global-(jj+1)];
+                for(int hil =0 ;hil<Syrk.length;hil++){
+                    final int hill=hil;
+                    Syrk[hill]=new Thread(new Runnable() {
+                        public void run(){
+                            System.out.printf("en las diagonales y ↓ %d\t",jj+1+hill);
+                            for(int ii=jj+1+hill;ii<k_global;ii++){
+                                ABloques[ii][jj+1+hill] = SYRK(ABloques[ii][jj+1+hill],LBloques[ii][jj],LBloques[jj+1+hill][jj]);
+                            }
+                        }
+                    });
                 }
+                for (Thread thread : Syrk) {
+                    thread.start();
+                }
+                for (Thread thread : Syrk) {
+                    try{
+                        thread.join();
+                    }catch(InterruptedException e){
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            });
+            try{
+                CompletableFuture.allOf(trsm,syrk).get();
+                System.out.println("trsm y sryk en orden");
+            }catch(InterruptedException | ExecutionException e){
+                e.printStackTrace();
             }
         }    
     }
@@ -399,7 +444,7 @@ public class CholeskyBloques {
         return PROD;
     }
  //----------------------------------------------------------------------------
- public static double[][] ProdParalelo(double[][]M1,double[][]M2){
+ public static synchronized double[][] ProdParalelo(double[][]M1,double[][]M2){
     double [][]PROD=new double[M1.length][M2[0].length];
     int N=M1.length;
     double[][] temp1;
@@ -1113,9 +1158,9 @@ class DataSetCholesky{
                     RAF.read(BUFFER);
                     String cad = BufferToString(BUFFER).trim();
                     M[i][j] = Double.parseDouble(cad);
-                    System.out.printf("%1.1f\t", M[i][j]);
+                    //System.out.printf("%1.1f\t", M[i][j]);
                     if(j==columnas - 1){
-                        System.out.println();
+                        //System.out.println();
                     }
                 }
             }
